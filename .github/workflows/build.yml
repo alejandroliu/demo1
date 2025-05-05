@@ -28,7 +28,9 @@ jobs:
     - name: Additional environment
       run: |
         (
-          echo IMAGE_NAME=$(echo "${{ env.IMAGE_NAME }} | tr A-Z a-z)
+          echo "IMAGE_NAME=$(echo "${{ env.IMAGE_NAME }}" | tr A-Z a-z)"
+          echo "PKG_OWNER=$(echo "${{ env.IMAGE_NAME}}" | cut -d/ -f1)"
+          echo "PKG_NAME=$(basename "${{ env.IMAGE_NAME}}")"
           echo "BUILD_DATE=$(date +'%Y%m%d')"
         ) >> $GITHUB_ENV
     - name: checkout repository
@@ -61,8 +63,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: |
-          ${{ steps.meta.outputs.tags }}
+        tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
           LIBC=${{ env.LIBC }}
@@ -75,6 +76,6 @@ jobs:
     - name: prune container registry
       uses: actions/delete-package-versions@v5
       with:
-        package-name: "${{ github.event.repository.name }}"
+        package-name: "${{ env.PKG_NAME }}"
         package-type: 'container'
         min-versions-to-keep: 9
