@@ -28,7 +28,7 @@ jobs:
     - name: Additional environment
       run: |
         (
-          echo IMAGE_NAME=$(echo "${{ env.IMAGE_NAME }} | tr A-Z a-z)
+          echo "IMAGE_NAME=$(echo "${{ env.IMAGE_NAME }}" | tr A-Z a-z)"
           echo "BUILD_DATE=$(date +'%Y%m%d')"
         ) >> $GITHUB_ENV
     - name: checkout repository
