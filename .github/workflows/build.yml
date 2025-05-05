@@ -29,6 +29,8 @@ jobs:
       run: |
         (
           echo "IMAGE_NAME=$(echo "${{ env.IMAGE_NAME }}" | tr A-Z a-z)"
+          echo "PKG_OWNER=$(echo "${{ env.IMAGE_NAME}}" | cut -d/ -f1)"
+          echo "PKG_NAME=$(basename "${{ env.IMAGE_NAME}}")"
           echo "BUILD_DATE=$(date +'%Y%m%d')"
         ) >> $GITHUB_ENV
     - name: checkout repository
